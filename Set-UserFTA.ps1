@@ -25,7 +25,6 @@ function Get-MSHash
 	for ($i = 0; $i -lt [uint32][math]::Floor($Data.length / 4); $i++)
 	{
 		$D = ([uint32]$Data[$i * 4 + 0]) + ([uint32]$Data[$i * 4 + 1] -shl 0x10)
-
 		$X0 = [uint64]($D + $X1) -band 0xFFFFFFFFL
 		$X1 = [uint64]($MD51 * $X0) -band 0xFFFFFFFFL
 		$X0 = [uint64](0x69FB0000L * $X0 + 0xEF0569FBL * ($X0 -shr 0x10)) -band 0xFFFFFFFFL
