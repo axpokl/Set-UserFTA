@@ -62,7 +62,13 @@ function Get-MSHash
 	Write-Output $MSHash
 }
 
-$Key = "HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\FileExts\" + $Ext + "\UserChoice"
+$Path = "SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\FileExts\" + $Ext + "\UserChoice"
+$Key = "HKCU:\" + $Path
+$Reg = [Microsoft.Win32.Registry]::CurrentUser.OpenSubKey($Path,[Microsoft.Win32.RegistryKeyPermissionCheck]::ReadWriteSubTree,[System.Security.AccessControl.RegistryRights]::ChangePermissions)
+$Acl = $Reg.GetAccessControl()
+$Rules = $Acl.Access | ? {$_.AccessControlType -eq 'Deny' -and $_.RegistryRights -eq "SetValue"}
+Foreach ($Rule in $Rules) {$Acl.RemoveAccessRule($Rule) | Out-Null}
+$Reg.SetAccessControl($Acl)
 $Time = ([uint64][math]::Floor((Get-Date).ToFileTime() / 600000000L) * 600000000L).ToString("X16")
 $SID = ([System.Security.Principal.WindowsIdentity]::GetCurrent()).User.Value
 $UserExp = "user choice set via windows user experience {d18b6dd5-6124-4341-9318-804003bafa0b}"
