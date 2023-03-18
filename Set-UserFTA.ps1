@@ -22,7 +22,7 @@ function Get-MSHash([byte[]]$MD5, [string]$Data)
 		$X1 = ($MD51 * $X0) -band 0xFFFFFFFFL
 		$X0 = Calc-Value 0x69FB0000L 0xEF0569FBL $X0
 		$X1 = ($X1 + $X0) -band 0xFFFFFFFFL
-		$X1 = Calc-Value 0x79F8A395L 0x689B6B9FL $X1		
+		$X1 = Calc-Value 0x79F8A395L 0x689B6B9FL $X1
 		$X1 = Calc-Value 0xEA970001L 0xC3EFEA97L $X1
 		$Y0 = ($D + $Y1) -band 0xFFFFFFFFL
 		$Y1 = ($MD51 * $Y0) -band 0xFFFFFFFFL
